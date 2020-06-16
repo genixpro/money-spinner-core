@@ -1,5 +1,5 @@
 from .tiletype import TileType
-
+from .tile import Tile
 
 
 
@@ -8,8 +8,10 @@ class Map:
         width = 100
         height = 100
 
+        self.loadTileTypes()
+
         self.grid = [
-            [self.tileTypes['grass'] for n in range(height)] for n in range(width)
+            [Tile(self.tileTypes['grass'], x, y) for y in range(height)] for x in range(width)
         ]
 
 

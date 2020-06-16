@@ -34,14 +34,14 @@ setup(
         'testing': tests_require,
     },
     package_data={
-        'moneyspinner': [`
+        'moneyspinner': [
             "tiles/*.json"
         ]
     },
     install_requires=requires,
     entry_points={
         'console_scripts': [
-            "moneyspinner = moneyspinner.bin.moneyspinner"
+            "moneyspinner = moneyspinner.bin.moneyspinner:main"
         ]
     },
 )

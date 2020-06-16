@@ -9,8 +9,9 @@ class EconomicObject:
 
 
 
-    def getAvailableActions(self):
-        pass
+    def getAvailableActions(self, person):
+        raise NotImplementedError()
+
 
 
 
