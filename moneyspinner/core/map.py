@@ -5,13 +5,13 @@ from .tile import Tile
 
 class Map:
     def __init__(self):
-        width = 100
-        height = 100
+        self.width = 50
+        self.height = 50
 
         self.loadTileTypes()
 
         self.grid = [
-            [Tile(self.tileTypes['grass'], x, y) for y in range(height)] for x in range(width)
+            [Tile(self.tileTypes['grass'], x, y) for y in range(self.height)] for x in range(self.width)
         ]
 
 

@@ -6,15 +6,21 @@ import json
 from flask import Flask
 from flask_cors import CORS
 import threading
+from .mapgenerator.mapgenerator import MapGenerator
 
 class Engine:
     def __init__(self):
+        mapGenerator = MapGenerator()
+
         self.map = Map()
+
+        mapGenerator.generateMap(self.map)
+
         self.heapQueue = []
         self.people = []
 
-        for n in range(100):
-            person = Person(self, random.randint(0, 99), random.randint(0, 99), n)
+        for n in range(50):
+            person = Person(self, random.randint(0, self.map.width - 1), random.randint(0, self.map.height - 1), n)
             heapq.heappush(self.heapQueue, person)
             self.people.append(person)
 
