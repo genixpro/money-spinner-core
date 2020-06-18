@@ -7,6 +7,11 @@ class Tile:
         self.x = x
         self.y = y
 
+        self.building = None
+        self.property = None
+
+        self.distanceFromObstacle = None
+        self.processed = False
 
     def json(self):
         return {
@@ -15,7 +20,14 @@ class Tile:
             "y": self.y
         }
 
+    def isObstacle(self):
+        if self.tileType.speed == 0:
+            return True
 
+        if self.building is not None:
+            return True
+
+        return False
 
 
 
