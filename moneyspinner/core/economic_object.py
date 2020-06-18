@@ -2,8 +2,8 @@ from .availableaction import AvailableAction
 
 
 class EconomicObject:
-    def __init__(self):
-        pass
+    def __init__(self, name):
+        self.name = name
 
 
 
@@ -15,3 +15,7 @@ class EconomicObject:
 
 
 
+    def json(self):
+        return {
+            "name": self.name
+        }

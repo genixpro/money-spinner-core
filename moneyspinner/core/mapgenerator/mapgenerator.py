@@ -1,5 +1,7 @@
 import random
 from ..property import Property
+from ..building import Building
+from ..objects.kitchenette.kitchenette import Kitchenette
 
 class MapGenerator:
     def __init__(self):
@@ -16,6 +18,10 @@ class MapGenerator:
 
         self.divideIntoProperties(map)
 
+        for property in map.properties:
+            building = self.addBuildingForProperty(map, property)
+            self.addRandomObjectsToBuilding(map, building)
+
     def addLake(self, map):
         expansionTiles = []
 
@@ -26,23 +32,13 @@ class MapGenerator:
         expansionTiles.append(lakeStart)
 
         lakeTiles = 50
-        while lakeTiles > 0:
+        while lakeTiles > 0 and len(expansionTiles) > 0:
             tile = random.choice(expansionTiles)
 
             possibleExpansions = []
-
-            for relX in [-1, 0, 1]:
-                for relY in [-1, 0, 1]:
-                    if relX == 0 and relY == 0:
-                        continue
-
-                    newX = tile.x + relX
-                    newY = tile.y + relY
-
-                    if newX >= 0 and newY >= 0 and newX < map.width and newY < map.height:
-                        expandTile = map.grid[newX][newY]
-                        if expandTile.tileType.name != 'water':
-                            possibleExpansions.append(expandTile)
+            for expandTile in map.neighborsOfTile(tile):
+                if expandTile.tileType.name != 'water':
+                    possibleExpansions.append(expandTile)
 
             if len(possibleExpansions) == 0:
                 expansionTiles.remove(tile)
@@ -96,5 +92,33 @@ class MapGenerator:
             propertyX += self.propertySize + self.propertySpacing
 
 
-    def addBuilding(self, map):
-        pass
+    def addBuildingForProperty(self, map, property):
+        building = Building(property.x + 1, property.y + 1, self.propertySize - 2, self.propertySize - 2, 1)
+
+        for x in range(building.x, building.x + building.width):
+            map.tileAt(x, building.y).tileType = map.tileTypes['wall']
+            map.tileAt(x, building.y + building.height).tileType = map.tileTypes['wall']
+
+        for y in range(building.y, building.y + building.height):
+            map.tileAt(building.x, y).tileType = map.tileTypes['wall']
+            map.tileAt(building.x + building.width, y).tileType = map.tileTypes['wall']
+
+        map.tileAt(building.x + building.width, building.y + building.height).tileType = map.tileTypes['wall']
+
+        for x in range(building.x + 1, building.x + building.width):
+            for y in range(building.y + 1, building.y + building.height):
+                map.tileAt(x, y).tileType = map.tileTypes['floor']
+
+        building.property = property
+        return building
+
+    def addRandomObjectsToBuilding(self, map, building):
+        options = [
+            Kitchenette
+        ]
+
+        chosen = random.choice(options)
+
+        newObject = chosen(building)
+
+        map.addBuildingObject(newObject)

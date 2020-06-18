@@ -1,13 +1,10 @@
-from moneyspinner.core.economic_object import EconomicObject
+from moneyspinner.core.building_object import BuildingObject
 from .cook_meal import CookMeal
 from .drink_water import DrinkWater
 
-class Kitchenette(EconomicObject):
-    def __init__(self, x, y):
-        super(EconomicObject, self).__init__()
-
-        self.x = x
-        self.y = y
+class Kitchenette(BuildingObject):
+    def __init__(self, building):
+        super().__init__("kitchenette", building)
 
         self.cookMealAction = CookMeal(self)
         self.drinkWaterAction = DrinkWater(self)
@@ -20,4 +17,8 @@ class Kitchenette(EconomicObject):
         ]
 
 
+    def json(self):
+        data = super(Kitchenette, self).json()
+
+        return data
 

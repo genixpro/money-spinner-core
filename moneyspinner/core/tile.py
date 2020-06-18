@@ -9,6 +9,7 @@ class Tile:
 
         self.building = None
         self.property = None
+        self.buildingObject = None
 
         self.distanceFromObstacle = None
         self.processed = False

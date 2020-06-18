@@ -39,6 +39,10 @@ class Engine:
         def people():
             return self.peopleEndpoint()
 
+        @self.app.route('/building_objects')
+        def buildingObjects():
+            return self.buildingObjectsEndpoint()
+
     def runMainLoop(self):
         while True:
             # Get the next person who has to decide upon an action
@@ -64,4 +68,8 @@ class Engine:
 
     def peopleEndpoint(self):
         return json.dumps({"people": [person.json() for person in self.people]})
+
+
+    def buildingObjectsEndpoint(self):
+        return json.dumps({"buildingObjects": [object.json() for object in self.map.buildingObjects]})
 

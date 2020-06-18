@@ -15,6 +15,10 @@ class Map:
         ]
 
         self.properties = []
+        self.buildings = []
+        self.buildingObjects = []
+
+        self.buildingObjectIdCounter = 0
 
     def allTiles(self):
         for row in self.grid:
@@ -48,6 +52,8 @@ class Map:
             "grass": TileType("grass"),
             "water": TileType("water"),
             "dirt_road": TileType("dirt_road"),
+            "wall": TileType("wall"),
+            "floor": TileType("floor"),
         }
 
 
@@ -77,3 +83,18 @@ class Map:
         for x in range(property.x, property.x + property.width):
             for y in range(property.y, property.y + property.height):
                 self.tileAt(x, y).property = property
+
+    def addBuilding(self, building):
+        self.buildings.append(building)
+
+        for x in range(building.x, building.x + building.width):
+            for y in range(building.y, building.y + building.height):
+                self.tileAt(x, y).building = building
+
+    def addBuildingObject(self, buildingObject):
+        buildingObject.id = self.buildingObjectIdCounter
+        self.buildingObjects.append(buildingObject)
+        self.buildingObjectIdCounter += 1
+
+        self.tileAt(buildingObject.x, buildingObject.y).buildingObject = buildingObject
+
