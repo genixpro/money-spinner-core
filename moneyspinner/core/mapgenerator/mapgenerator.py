@@ -110,6 +110,8 @@ class MapGenerator:
                 map.tileAt(x, y).tileType = map.tileTypes['floor']
 
         building.property = property
+
+        map.addBuilding(building)
         return building
 
     def addRandomObjectsToBuilding(self, map, building):

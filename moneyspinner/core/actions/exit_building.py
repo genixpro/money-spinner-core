@@ -8,3 +8,11 @@ class ExitBuilding(AvailableAction):
         self.building = building
 
 
+
+
+    def execute(self, person):
+        person.currentBuilding = None
+
+        return 1
+
+

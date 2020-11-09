@@ -6,6 +6,7 @@ import json
 from flask import Flask
 from flask_cors import CORS
 import threading
+import datetime
 from .mapgenerator.mapgenerator import MapGenerator
 
 class Engine:
@@ -27,6 +28,8 @@ class Engine:
         self.app = Flask("moneyspinner")
         CORS(self.app)
 
+        self.mainLoopRunning = False
+
         @self.app.route('/')
         def home():
             return self.homeEndpoint()
@@ -44,13 +47,25 @@ class Engine:
             return self.buildingObjectsEndpoint()
 
     def runMainLoop(self):
-        while True:
-            # Get the next person who has to decide upon an action
-            person = heapq.heappop(self.heapQueue)
-            action = person.decideNextAction()
-            actionFinishTime = action.execute()
-            person.nextActionTime = actionFinishTime
-            heapq.heappush(self.heapQueue, person)
+        if not self.mainLoopRunning:
+            self.mainLoopRunning = True
+            print("running main loop")
+            start = datetime.datetime.now()
+            count = 0
+            while True:
+                # Get the next person who has to decide upon an action
+                person = heapq.heappop(self.heapQueue)
+                action = person.decideNextAction()
+                actionFinishTime = action.execute(person)
+                person.nextActionTime = actionFinishTime
+                heapq.heappush(self.heapQueue, person)
+                count += 1
+                seconds = (datetime.datetime.now() - start).total_seconds()
+                if seconds > 10:
+                    print(count / seconds)
+                    start = datetime.datetime.now()
+                    count = 0
+
 
     def runAPIServer(self):
         self.app.run(debug=True, port=42424, host='0.0.0.0')

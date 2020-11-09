@@ -1,4 +1,5 @@
 import functools
+import random
 
 @functools.total_ordering
 class Person:
@@ -16,13 +17,17 @@ class Person:
     def getAvailableActions(self):
         actions = []
         if self.currentBuilding is not None:
-            actions.extend(self.currentBuilding.getAvailableActions())
+            actions.extend(self.currentBuilding.getAvailableActions(self))
+        else:
+            for building in self.engine.map.buildings:
+                actions.append(building.enterAction)
 
         return actions
 
 
     def decideNextAction(self):
-        pass
+        available = self.getAvailableActions()
+        return random.choice(available)
 
 
     def __eq__(self, other):

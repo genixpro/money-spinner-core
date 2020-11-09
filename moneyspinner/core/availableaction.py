@@ -11,3 +11,6 @@ class AvailableAction:
 
 
 
+    def execute(self, person):
+        raise NotImplementedError()
+
